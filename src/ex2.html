@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link href="style.css" rel="stylesheet">
+  <title>A11y tabs test- Example 2</title>
+</head>
+<body>
+  <h1>A11y Tabs test- Example 2</h1>
+  <p>Uses arrow keys for traversing tabs, and aria attributes that notify the user that this is indeed a tab list.  This is the official standard, although it may confuse some users <a href="http://simplyaccessible.com/article/danger-aria-tabs/">http://simplyaccessible.com/article/danger-aria-tabs/</a>
+  <div class="tab-list js-tab-list" role="tablist">
+    <a href="#tabpanel-wine-and-spirits" class="tab is-active js-tab-link" role="tab" tabIndex="0" aria-controls="tab-wine-and-sprits" aria-selected="true">Wine and Spirits</a>
+    <a href="#tabpanel-fruit-and-veg" class="tab js-tab-link" role="tab" tabIndex="-1" aria-controls="tab-fruit-and-veg" aria-selected="false">Fruit and Veg</a>
+    <a href="#tabpanel-clothing" class="tab js-tab-link" role="tab" tabIndex="-1" aria-controls="tab-clothing" aria-selected="false">Clothing</a>
+  </div>
+  <div id="tabpanel-wine-and-spirits" class="panel js-tab-panel" role="tabpanel" aria-labelledby="wine-and-spirits-title" aria-hidden="false">
+    <h2 id="wine-and-spirits-title">Wine and Sprits</h2>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dignissimos, aliquid.d</p>
+    <button>Click me to buy Wine and Spirits</button>
+  </div>
+  <div id="tabpanel-fruit-and-veg" class="panel u-hidden js-tab-panel" role="tabpanel" aria-labelledby="fruit-and-veg-title" aria-hidden="true">
+    <h2 id="fruit-and-veg-title">Fruit and veg</h2>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dignissimos, aliquid.d</p>
+    <button>Click me to buy Fruit and veg</button>
+  </div>
+  <div id="tabpanel-clothing" class="panel u-hidden js-tab-panel" role="tabpanel" aria-labelledby="clothing-title" aria-hidden="true">
+    <h2 id="clothing-title">Clothing</h2>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dignissimos, aliquid.d</p>
+    <button>Click me to buy clothing</button>
+  </div>
+  <a href="ex1">See Example 1</a>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+  <script>
+  function tabNavigation($, globals) {
+    var $tabLink = $('.js-tab-link')
+
+    function onTabClick(e) {
+      var $target = $(e.target)
+      var targetHref = $target.attr('href')
+
+      e.preventDefault()
+      $target
+        .closest('.js-tab-list')
+        .find('.js-tab-link')
+        .removeClass(globals.IS_ACTIVE)
+        .attr({
+          tabindex: -1,
+          'aria-selected': false
+        })
+
+      $target
+        .addClass(globals.IS_ACTIVE)
+        .attr({
+          tabIndex: 0,
+          'aria-selected': true
+        })
+
+      $('.js-tab-panel')
+        .addClass('u-hidden')
+        .attr('aria-hidden', true)
+
+      $(targetHref)
+        .removeClass('u-hidden')
+        .attr('aria-hidden', false)
+    }
+
+    function switchTabLeft(e) {
+      var $prev = $(e.target).prev();
+      if ($prev.length) {
+        $prev.click().focus();
+      }
+    }
+
+    function switchTabRight(e) {
+      var $next = $(e.target).next();
+      if ($next.length) {
+        $next.click().focus();
+      }
+    }
+
+    function onTabKeyDown(e) {
+      if (e.which === 37) {
+        return switchTabLeft(e)
+      }
+
+      if (e.which === 39) {
+        return switchTabRight(e)
+      }
+    }
+
+    $tabLink.on('click', onTabClick)
+    $tabLink.on('keydown', onTabKeyDown)
+  }
+
+  (function($) {
+    $(function() {
+      var globals = {
+        IS_ACTIVE: 'is-active',
+      }
+      tabNavigation($, globals)
+    })
+})(jQuery)
+  </script>
+</body>
+</html>
