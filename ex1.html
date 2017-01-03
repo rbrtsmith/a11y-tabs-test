@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link href="style.css" rel="stylesheet">
+  <title>A11y tabs test- Example 1</title>
+</head>
+<body>
+  <h1>A11y Tabs test- Example 1</h1>
+  <ul class="tab-list js-tab-list">
+    <li class="tab-list__item">
+      <a href="#tabpanel-wine-and-spirits" class="tab is-active js-tab-link" aria-selected="true" id="tab1">Wine and Spirits</a>
+    </li>
+    <li class="tab-list__item">
+      <a href="#tabpanel-fruit-and-veg" class="tab js-tab-link" aria-selected="false" id="tab2">Fruit and Veg</a>
+    </li>
+    <li class="tab-list__item">
+      <a href="#tabpanel-clothing" class="tab js-tab-link" aria-selected="false" id="tab3">Clothing</a>
+    </li>
+  </ul>
+  <div id="tabpanel-wine-and-spirits" class="panel js-tab-panel" aria-labelledby="tab1" aria-hidden="false">
+    <h2>Wine and Sprits</h2>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dignissimos, aliquid.d</p>
+    <button>Click me to buy Wine and Spirits</button>
+  </div>
+  <div id="tabpanel-fruit-and-veg" class="panel u-hidden js-tab-panel" aria-labelledby="tab2" aria-hidden="true">
+    <h2>Fruit and veg</h2>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dignissimos, aliquid.d</p>
+    <button>Click me to buy Fruit and veg</button>
+  </div>
+  <div id="tabpanel-clothing" class="panel u-hidden js-tab-panel" aria-labelledby="tab3" aria-hidden="true">
+    <h2>Clothing</h2>
+    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dignissimos, aliquid.d</p>
+    <button>Click me to buy clothing</button>
+  </div>
+
+  <a href="ex2">See Example 2</a>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+  <script>
+  function tabNavigation($, globals) {
+    var $tabLink = $('.js-tab-link')
+
+    function onTabClick(e) {
+      var $target = $(e.target)
+      var targetHref = $target.attr('href')
+
+      e.preventDefault()
+      $target
+      .closest('.js-tab-list')
+      .find('.js-tab-link')
+      .removeClass(globals.IS_ACTIVE)
+      .attr('aria-selected', false)
+
+      $target
+      .addClass(globals.IS_ACTIVE)
+      .attr('aria-selected', true)
+
+      $('.js-tab-panel')
+      .addClass('u-hidden')
+      .attr('aria-hidden', true)
+
+      $(targetHref)
+      .removeClass('u-hidden')
+      .attr('aria-hidden', false)
+    }
+
+    function onTabKeyDown(e) {
+      if (e.which === 37) {
+        return switchTabLeft(e)
+      }
+
+      if (e.which === 39) {
+        return switchTabRight(e)
+      }
+    }
+
+    $tabLink.on('click', onTabClick)
+  }
+
+  (function($) {
+    $(function() {
+      var globals = {
+        IS_ACTIVE: 'is-active',
+      }
+      tabNavigation($, globals)
+    })
+  })(jQuery)
+</script>
+</body>
+</html>
